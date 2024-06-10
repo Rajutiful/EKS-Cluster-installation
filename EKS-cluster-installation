@@ -1,0 +1,38 @@
+
+                   [EKS cluster installation youtube video]               URL>>>>>>>>>>>>>>>>> https://www.youtube.com/watch?v=8Sw8caEUeF4     
+###############################################################################################################################################
+
+
+apt update && apt install unzip -y
+    2  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    3  unzip awscliv2.zip
+    4  sudo ./aws/install
+    5  aws --version
+ curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar -xz -C /tmp
+ cd /tmp
+   11  ls
+   12  mv eksctl /usr/local/bin
+   13  eksctl
+   14  curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+   15  ls
+   16  chmod +x kubectl
+   17  mv kubectl /usr/local/bin
+   18  kubectl
+   19  cd ..
+   20  aws configure
+(i) we no need to create access key and secret access key just enter by default but region= ap-south-1 
+                                                                        and format specify= json 
+ eksctl create cluster --name "shukra" --version 1.29 --region ap-south-1 --zones=ap-south-1a,ap-south-1b,ap-south-1c --without-nodegroup
+ kubectl cluster-info
+eksctl utils associate-iam-oidc-provider --region ap-south-1 --cluster shukra --approve
+eksctl create nodegroup --cluster=shukra --region=ap-south-1 \
+--name=shukra-ng-1 --node-type=t2.micro \
+--nodes=2 --nodes-min=2 --nodes-max=4 --node-volume-size=20 \
+--ssh-access --ssh-public-key=corp_key \
+--managed --asg-access --external-dns-access --full-ecr-access \
+--appmesh-access --alb-ingress-access
+kubectl get nodes
+kubectl get pods -A
+
+
+
